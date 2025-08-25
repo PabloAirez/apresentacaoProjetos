@@ -32,6 +32,46 @@
         .timeline-header p {
             color: rgba(255,255,255,0.9);
             font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .filter-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .filter-icon {
+            font-size: 1rem;
         }
 
         .timeline {
@@ -79,10 +119,36 @@
             transition: all 0.3s ease;
         }
 
+        .timeline-item.finalizado::before {
+            background: linear-gradient(45deg, #4CAF50 0%, #8BC34A 100%);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .timeline-item.pendente-com-inicio::before {
+            background: linear-gradient(45deg, #FFC107 0%, #FF9800 100%);
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.6);
+        }
+
+        .timeline-item.pendente-sem-inicio::before {
+            background: linear-gradient(45deg, #F44336 0%, #E91E63 100%);
+            box-shadow: 0 0 20px rgba(244, 67, 54, 0.6);
+        }
+
         .timeline-item:hover::before {
             width: 24px;
             height: 24px;
-            box-shadow: 0 0 30px rgba(79, 172, 254, 0.8);
+        }
+
+        .timeline-item.finalizado:hover::before {
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.8);
+        }
+
+        .timeline-item.pendente-com-inicio:hover::before {
+            box-shadow: 0 0 30px rgba(255, 193, 7, 0.8);
+        }
+
+        .timeline-item.pendente-sem-inicio:hover::before {
+            box-shadow: 0 0 30px rgba(244, 67, 54, 0.8);
         }
 
         .timeline-content {
@@ -103,11 +169,11 @@
 
         .timeline-item:nth-child(odd) .timeline-content {
             margin-left: auto;
-            margin-right: 40px;
+            margin-right: 10px;
         }
 
         .timeline-item:nth-child(even) .timeline-content {
-            margin-left: 40px;
+            margin-left: 10px;
         }
 
         .timeline-content::before {
@@ -121,13 +187,13 @@
         }
 
         .timeline-item:nth-child(odd) .timeline-content::before {
-            right: -30px;
-            border-left-color: white;
+            left: -30px;
+            border-right-color: white;
         }
 
         .timeline-item:nth-child(even) .timeline-content::before {
-            left: -30px;
-            border-right-color: white;
+            right: -30px;
+            border-left-color: white;
         }
 
         .timeline-image {
@@ -154,6 +220,35 @@
             color: #666;
             font-size: 0.95rem;
             font-weight: 500;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 5;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .status-badge.finalizado {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .status-badge.pendente-inicio {
+            background: linear-gradient(45deg, #FFC107, #FF9800);
+            color: white;
+        }
+
+        .status-badge.pendente-sem-inicio {
+            background: linear-gradient(45deg, #F44336, #E91E63);
+            color: white;
         }
 
         .tooltip {
@@ -184,12 +279,30 @@
 
         .tooltip p {
             margin-bottom: 0.3rem;
+            line-height: 1.4;
         }
 
         .tooltip .dates {
             font-size: 0.8rem;
             color: #ccc;
+            margin: 0.5rem 0;
+        }
+
+        .tooltip .etapa {
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem;
+            border-radius: 5px;
             margin-top: 0.5rem;
+            border-left: 3px solid #FFC107;
+        }
+
+        .tooltip .etapa strong {
+            color: #FFC107;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         @media (max-width: 768px) {
@@ -208,14 +321,21 @@
             }
 
             .timeline-content::before {
-                left: -30px !important;
-                right: auto !important;
-                border-left-color: transparent !important;
-                border-right-color: white !important;
+                display: none;
             }
 
             .timeline-header h1 {
                 font-size: 2rem;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filter-btn {
+                width: 200px;
+                justify-content: center;
             }
         }
 

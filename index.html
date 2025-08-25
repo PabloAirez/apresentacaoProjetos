@@ -8,10 +8,25 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+   <div class="container">
         <div class="timeline-header">
-            <h1>Linha do Tempo - Desenvolvimento</h1>
-            <p>Explore os projetos desenvolvidos para o HRSJ</p>
+            <h1>Linha do Tempo</h1>
+            <p>Explore os projetos e marcos importantes</p>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="todos">
+                    <span class="filter-icon">📋</span>
+                    Todos (<span id="count-todos">0</span>)
+                </button>
+                <button class="filter-btn" data-filter="finalizados">
+                    <span class="filter-icon">✅</span>
+                    Finalizados (<span id="count-finalizados">0</span>)
+                </button>
+                <button class="filter-btn" data-filter="pendentes">
+                    <span class="filter-icon">⏳</span>
+                    Pendentes (<span id="count-pendentes">0</span>)
+                </button>
+            </div>
         </div>
         
         <div class="timeline" id="timeline">
