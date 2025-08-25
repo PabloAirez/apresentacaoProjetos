@@ -1,7 +1,7 @@
  const projetos = [
             {
                 titulo: "Sistema de chamados",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/1t7Pn3Dt/chamados.png",
                 descricao: "Sistema interno de gerenciamento de chamados, com os módulos da TI, Manutenção, Compras, Assistência Social, Psicologia,Higienização, Almoxarifado e Hotelaria.",
                 dataInicio: "2022-05-01",
                 dataFim: "2022-09-01",
@@ -10,7 +10,7 @@
             },
             {
                 titulo: "Inventário da Manutenção",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/YBw6J0gS/invent-rio.png",
                 descricao: "Inventário de equipamentos do HRSJ, com controle de manutenção preventiva e corretiva.",
                 dataInicio: "2023-06-01",
                 dataFim: "2023-06-23",
@@ -19,7 +19,7 @@
             },
             {
                 titulo: "HRSJEducamais",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/vChqtXJW/treinamentos.png",
                 descricao: "Plataforma de ensino a distância para capacitação dos colaboradores do HRSJ.",
                 dataInicio: "2023-09-01",
                 dataFim: "2023-12-07",
@@ -28,7 +28,7 @@
             },
             {
                 titulo: "Site Institucional",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/PsWTVRXj/site.png",
                 descricao: "Site oficial do Hospital São Jerônimo, com informações para pacientes e visitantes.",
                 dataInicio: "2023-08-17",
                 dataFim: "2025-05-01",
@@ -37,7 +37,7 @@
             },
              {
                 titulo: "SBAR - Passagem de plantão",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/rGmYbx7Q/sbar.png",
                 descricao: "Sistema de passagem de plantão da enfermagem digital, utilizando a metodologia SBAR (Situação, Background, Avaliação, Recomendação).",
                 dataInicio: "2024-04-01",
                 dataFim: "2025-01-31",
@@ -46,7 +46,7 @@
             },
             {
                 titulo: "Relatórios com base no SIGH",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/jjJmtS2/relatorios.png",
                 descricao: "Geração de relatórios não previstos no SIGH a partir dos dados do sistema de gestão.",
                 dataInicio: "2024-09-11",
                 dataFim: "2024-09-19",
@@ -64,7 +64,7 @@
             },
             {
                 titulo: "Atalhos da intranet",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/RkB9633Q/atalhos.png",
                 descricao: "Sistema de atalhos personalizados na intranet para acesso rápido a sistemas e recursos frequentes.",
                 dataInicio: "2025-05-08",
                 dataFim: "2025-05-14",
@@ -73,7 +73,7 @@
             },
             {
                 titulo: "Lista de ramais telefônicos",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/8n4N6XBM/ramais.png",
                 descricao: "Sistema de atalhos personalizados na intranet para acesso rápido a sistemas e recursos frequentes.",
                 dataInicio: "2025-06-18",
                 dataFim: "2025-06-20",
@@ -82,7 +82,7 @@
             },
             {
                 titulo: "Painel da Emergência",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/CsD5ZnSz/painel.png",
                 descricao: "Sistema de monitoramento em tempo real dos exames pendentes para reavaliação na emergência.",
                 dataInicio: "2025-06-10",
                 dataFim: "2025-08-20",
@@ -91,7 +91,7 @@
             },
             {
                 titulo: "Sistema de alta administrativa",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ibb.co/KxFQVZTj/alta.png",
                 descricao: "Sistema para realizar alta administrativa, integrando com o sistema de gestão hospitalar e com o AD.",
                 dataInicio: "2025-07-28",
                 dataFim: "2025-08-21",
@@ -100,7 +100,7 @@
             },
             {
                 titulo: "Ideias de Inovação",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://lh4.googleusercontent.com/proxy/22XoaPBCo5Hi3NESQx5bHW7dMIRaWHf3g0SU-vdDPT6xeDABrle8xGG5nQet_6AA-vZ8HQfv08LiUosvsvWsRQ5I9Zf5KYEsk0G-MxRQ4FGQVVEitnUtypnxKgxFzZd1",
                 descricao: "Plataforma para submissão e votação de ideias de inovação pelos colaboradores do HRSJ.",
                 dataInicio: "2025-08-07",
                 finalizado: false,
@@ -108,7 +108,7 @@
             },
             {
                 titulo: "Intranet Corporativa",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://www.sabesim.com.br/wp-content/images/2016/01/21142413/gestao-de-equipes.jpg",
                 descricao: "Nova intranet corporativa para melhorar a comunicação interna e o acesso a recursos pelos colaboradores.",
                 dataInicio: null,
                 finalizado: false,
@@ -117,7 +117,7 @@
             },
             {
                 titulo: "Nova versão do sistema de chamados",
-                imagem: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                imagem: "https://i.ytimg.com/vi/yX0hYG-vdsA/maxresdefault.jpg",
                 descricao: "Atualização completa do sistema de chamados, com novas funcionalidades e melhorias na interface.",
                 dataInicio: null,
                 finalizado: false,
