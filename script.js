@@ -102,17 +102,17 @@
                 titulo: "Ideias de Inovação",
                 imagem: "https://lh4.googleusercontent.com/proxy/22XoaPBCo5Hi3NESQx5bHW7dMIRaWHf3g0SU-vdDPT6xeDABrle8xGG5nQet_6AA-vZ8HQfv08LiUosvsvWsRQ5I9Zf5KYEsk0G-MxRQ4FGQVVEitnUtypnxKgxFzZd1",
                 descricao: "Plataforma para submissão e votação de ideias de inovação pelos colaboradores do HRSJ.",
-                dataInicio: "2025-08-07",
-                finalizado: false,
+                dataInicio: "2025-09-01",
+                finalizado: "2025-09-19",
                 link: "https://www.figma.com/proto/IRXtdbWLIrzN5VvmmHI30J/sistema-de-gest%C3%A3o-de-ideias?node-id=64-11&t=2opc99odnPUglx3q-1&scaling=contain&content-scaling=fixed&page-id=0%3A1"
             },
             {
                 titulo: "Intranet Corporativa",
                 imagem: "https://www.sabesim.com.br/wp-content/images/2016/01/21142413/gestao-de-equipes.jpg",
                 descricao: "Nova intranet corporativa para melhorar a comunicação interna e o acesso a recursos pelos colaboradores.",
-                dataInicio: null,
+                dataInicio: "2025-08-18",
                 finalizado: false,
-                etapa: "Em fase de planejamento e levantamento de requisitos",
+                etapa: "Base construída. Criando o gerenciamento dinâmico dos módulos da Intranet (o que cada setor poderá ver dentro da intranet)",
                 link: "#"
             },
             {
