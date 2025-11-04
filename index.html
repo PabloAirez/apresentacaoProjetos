@@ -1,11 +1,401 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desenvolvimento de projetos</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .timeline-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .filter-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .filter-icon {
+            font-size: 1rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
+            transform: translateX(-50%);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 3rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: scale(1.02);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            border: 4px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item.em-melhoria::before {
+            background: linear-gradient(45deg, #2196F3 0%, #03A9F4 100%);
+            box-shadow: 0 0 20px rgba(33, 150, 243, 0.6);
+        }
+
+        .timeline-item.finalizado::before {
+            background: linear-gradient(45deg, #4CAF50 0%, #8BC34A 100%);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .timeline-item.pendente-com-inicio::before {
+            background: linear-gradient(45deg, #FFC107 0%, #FF9800 100%);
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.6);
+        }
+
+        .timeline-item.pendente-sem-inicio::before {
+            background: linear-gradient(45deg, #F44336 0%, #E91E63 100%);
+            box-shadow: 0 0 20px rgba(244, 67, 54, 0.6);
+        }
+
+        .timeline-item:hover::before {
+            width: 24px;
+            height: 24px;
+        }
+
+        .timeline-item.em-melhoria:hover::before {
+            box-shadow: 0 0 30px rgba(33, 150, 243, 0.8);
+        }
+
+        .timeline-item.finalizado:hover::before {
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.8);
+        }
+
+        .timeline-item.pendente-com-inicio:hover::before {
+            box-shadow: 0 0 30px rgba(255, 193, 7, 0.8);
+        }
+
+        .timeline-item.pendente-sem-inicio:hover::before {
+            box-shadow: 0 0 30px rgba(244, 67, 54, 0.8);
+        }
+
+        .timeline-content {
+            width: calc(50% - 40px);
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-content:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transform: translateY(-5px);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 10px;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            left: -30px;
+            border-right-color: white;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            right: -30px;
+            border-left-color: white;
+        }
+
+        .timeline-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-image:hover {
+            transform: scale(1.05);
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-date {
+            color: #666;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 5;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .status-badge.em-melhoria {
+            background: linear-gradient(45deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        .status-badge.finalizado {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .status-badge.pendente-inicio {
+            background: linear-gradient(45deg, #FFC107, #FF9800);
+            color: white;
+        }
+
+        .status-badge.pendente-sem-inicio {
+            background: linear-gradient(45deg, #F44336, #E91E63);
+            color: white;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            max-width: 300px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .tooltip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tooltip h4 {
+            margin-bottom: 0.5rem;
+            color: #4facfe;
+        }
+
+        .tooltip p {
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+        }
+
+        .tooltip .dates {
+            font-size: 0.8rem;
+            color: #ccc;
+            margin: 0.5rem 0;
+        }
+
+        .tooltip .etapa {
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            border-left: 3px solid #FFC107;
+        }
+
+        .tooltip .etapa strong {
+            color: #FFC107;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tooltip .melhoria {
+            background: rgba(33, 150, 243, 0.2);
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            border-left: 3px solid #2196F3;
+        }
+
+        .tooltip .melhoria strong {
+            color: #03A9F4;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item::before {
+                left: 30px;
+            }
+
+            .timeline-content {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+                margin-right: 0 !important;
+            }
+
+            .timeline-content::before {
+                display: none;
+            }
+
+            .timeline-header h1 {
+                font-size: 2rem;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filter-btn {
+                width: 200px;
+                justify-content: center;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 2rem 0;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 2s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+    </style>
 </head>
 <body>
    <div class="container">
@@ -22,15 +412,19 @@
                     <span class="filter-icon">✅</span>
                     Finalizados (<span id="count-finalizados">0</span>)
                 </button>
+                <button class="filter-btn" data-filter="melhorias">
+                    <span class="filter-icon">🔧</span>
+                    Em Melhoria (<span id="count-melhorias">0</span>)
+                </button>
                 <button class="filter-btn" data-filter="pendentes">
                     <span class="filter-icon">⏳</span>
                     Pendentes (<span id="count-pendentes">0</span>)
                 </button>
-                  <a target="_blank" style="text-decoration: none;" href="https://golden-anaconda-dfb.notion.site/Task-List-HRSJ-21cc39d22f5d80028080cf3a70ffb533">
-                  <button class="filter-btn">
-                    <span class="filter-icon">🗎</span>
-                   Notion 
-                </button>
+                <a target="_blank" style="text-decoration: none;" href="https://golden-anaconda-dfb.notion.site/Task-List-HRSJ-21cc39d22f5d80028080cf3a70ffb533">
+                    <button class="filter-btn">
+                        <span class="filter-icon">🗂</span>
+                        Notion 
+                    </button>
                 </a>
             </div>
         </div>
