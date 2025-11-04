@@ -59,7 +59,7 @@
                 descricao: "Sistema de gerenciamento de compra de vales almoço para os colaboradores do HRSJ.",
                 dataInicio: "2024-12-02",
                 finalizado: false,
-                etapa: "Em redefinição da lógica do sistema para integrar a nova Intranet",
+                etapa: "Funcionalidades prontas: Compra de vales, cadastro de cardápios, registrar interesse em cardápios, edição de cardápios, gerar lista de interessados em almoçar/jantar. Falta a nutrição poder cadastrar manualmente alguém após às 08:45h",
                 link: "#"
             },
             {
@@ -112,7 +112,7 @@
                 descricao: "Nova intranet corporativa para melhorar a comunicação interna e o acesso a recursos pelos colaboradores.",
                 dataInicio: "2025-08-18",
                 finalizado: false,
-                etapa: "Base construída. Criando o gerenciamento dinâmico dos módulos da Intranet (o que cada setor poderá ver dentro da intranet)",
+                etapa: "Base construída. Os módulos de Ideias, gerenciamento de módulos, atalhos, ramais e documentos institucionais estão prontos. Criando o módulo de vales",
                 link: "#"
             },
             {
