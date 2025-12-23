@@ -351,30 +351,67 @@
             animation: dots 2s infinite;
         }
 
-        .priority-badge {
+  /* ================================
+   BADGE DE PRIORIDADE
+================================ */
+.priority-badge {
     display: inline-block;
     margin-top: 6px;
-    padding: 4px 8px;
+    margin-bottom: 8px;
+    padding: 4px 10px;
     font-size: 11px;
-    font-weight: 600;
-    border-radius: 6px;
+    font-weight: 700;
+    border-radius: 999px;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    width: fit-content;
 }
 
+/* 🔴 PRIORIDADE ALTA */
 .priority-badge.alta {
-    background-color: #dc2626;
-    color: #fff;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
 }
 
+/* 🟠 PRIORIDADE MÉDIA */
 .priority-badge.média {
-    background-color: #f59e0b;
-    color: #fff;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
 }
 
+/* 🟢 PRIORIDADE BAIXA */
 .priority-badge.baixa {
-    background-color: #16a34a;
-    color: #fff;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(22, 163, 74, 0.35);
 }
+
+/* ================================
+   PRIORIDADE NO TOOLTIP
+================================ */
+#tooltip .prioridade {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #374151;
+}
+
+#tooltip .prioridade strong {
+    color: #111827;
+}
+
+/* ================================
+   AJUSTES RESPONSIVOS
+================================ */
+@media (max-width: 768px) {
+    .priority-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+}
+
 
 
         @keyframes dots {
