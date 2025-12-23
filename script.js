@@ -1,6 +1,3 @@
-/**************************************************
- * DADOS DOS PROJETOS
- **************************************************/
 const projetos = [
     {
         titulo: "Módulo de comunicação de acidentes do trabalho",
@@ -53,9 +50,9 @@ const projetos = [
         link: "#"
     },
     {
-        titulo: "Módulo de solicitação de cafés para a nutrição",
+        titulo: "Módulo de solicitações para a nutrição",
         imagem: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop",
-        descricao: "Registro de solicitações de cafés para a nutrição, com geração de custos por setor, visando controle e conscientização sobre o uso de recursos.",
+        descricao: "Registro de solicitações de cafés, salgados e bolos para eventos institucionais, com geração de custos por setor, visando controle e conscientização sobre o uso de recursos.",
         dataInicio: null,
         finalizado: false,
         etapa: "Não iniciado",
@@ -74,52 +71,34 @@ const projetos = [
     }
 ];
 
-/**************************************************
- * FUNÇÕES AUXILIARES
- **************************************************/
 function formatarData(dataInicio, dataFim, finalizado) {
     const formatoData = (data) => {
         const date = new Date(data);
-        return date.toLocaleDateString('pt-BR', {
-            month: 'short',
-            year: 'numeric'
+        return date.toLocaleDateString('pt-BR', { 
+            month: 'short', 
+            year: 'numeric' 
         });
     };
-
+    
     if (!dataInicio) {
         return finalizado && dataFim ? `Até ${formatoData(dataFim)}` : 'Data não definida';
     }
-
+    
     if (!finalizado) {
         return `${formatoData(dataInicio)} - Atualmente`;
     }
-
-    return dataFim
-        ? `${formatoData(dataInicio)} - ${formatoData(dataFim)}`
-        : `${formatoData(dataInicio)} - Atualmente`;
+    
+    return dataFim ? `${formatoData(dataInicio)} - ${formatoData(dataFim)}` : `${formatoData(dataInicio)} - Atualmente`;
 }
 
-function criarBadgePrioridade(prioridade) {
-    if (!prioridade) return '';
-
-    const classe = prioridade.toLowerCase(); // alta | média | baixa
-    return `
-        <div class="priority-badge ${classe}">
-            Prioridade: ${prioridade}
-        </div>
-    `;
-}
-
-/**************************************************
- * CRIAÇÃO DOS ITENS DA TIMELINE
- **************************************************/
 function criarItemTimeline(projeto, index) {
     const item = document.createElement('div');
     item.className = 'timeline-item';
-
-    // Classes por status
+    
+    // Adicionar classes baseadas no status
     if (projeto.emMelhoria) {
-        item.classList.add('em-melhoria', 'finalizado');
+        item.classList.add('em-melhoria');
+        item.classList.add('finalizado');
     } else if (projeto.finalizado) {
         item.classList.add('finalizado');
     } else if (projeto.dataInicio) {
@@ -127,73 +106,66 @@ function criarItemTimeline(projeto, index) {
     } else {
         item.classList.add('pendente-sem-inicio');
     }
-
+    
     item.style.animationDelay = `${index * 0.2}s`;
-
-    const statusIndicator = projeto.emMelhoria
-        ? `<div class="status-badge em-melhoria">Em Melhoria</div>`
-        : projeto.finalizado
-            ? `<div class="status-badge finalizado">Finalizado</div>`
-            : projeto.dataInicio
-                ? `<div class="status-badge pendente-inicio">Em andamento</div>`
-                : `<div class="status-badge pendente-sem-inicio">Planejamento</div>`;
-
-    const prioridadeBadge = criarBadgePrioridade(projeto.prioridade);
-
+    
+    const statusIndicator = projeto.emMelhoria ? 
+        ('<div class="status-badge finalizado">Finalizado</div>',
+        '<div class="status-badge em-melhoria">Em Melhoria</div>') :
+        projeto.finalizado ? 
+            '<div class="status-badge finalizado">Finalizado</div>' :
+            projeto.dataInicio ? 
+                '<div class="status-badge pendente-inicio">Em andamento</div>' :
+                '<div class="status-badge pendente-sem-inicio">Planejamento</div>';
+    
     item.innerHTML = `
         <div class="timeline-content">
             ${statusIndicator}
-            ${prioridadeBadge}
             <img src="${projeto.imagem}" alt="${projeto.titulo}" class="timeline-image">
             <h3 class="timeline-title">${projeto.titulo}</h3>
-            <div class="timeline-date">
-                ${formatarData(projeto.dataInicio, projeto.dataFim, projeto.finalizado)}
-            </div>
+            <div class="timeline-date">${formatarData(projeto.dataInicio, projeto.dataFim, projeto.finalizado)}</div>
         </div>
     `;
 
-    // Eventos
+    // Adicionar eventos
     item.addEventListener('mouseenter', (e) => mostrarTooltip(e, projeto));
     item.addEventListener('mouseleave', esconderTooltip);
     item.addEventListener('mousemove', moverTooltip);
     item.addEventListener('click', () => {
-        if (projeto.link && projeto.link !== '#') {
-            window.open(projeto.link, '_blank');
-        }
+        window.open(projeto.link, '_blank');
     });
 
     return item;
 }
 
-/**************************************************
- * TOOLTIP
- **************************************************/
 function mostrarTooltip(event, projeto) {
     const tooltip = document.getElementById('tooltip');
+    const tooltipTitle = document.getElementById('tooltip-title');
+    const tooltipDescription = document.getElementById('tooltip-description');
+    const tooltipDates = document.getElementById('tooltip-dates');
 
-    document.getElementById('tooltip-title').textContent = projeto.titulo;
-    document.getElementById('tooltip-description').textContent = projeto.descricao;
-    document.getElementById('tooltip-dates').textContent =
-        formatarData(projeto.dataInicio, projeto.dataFim, projeto.finalizado);
+    tooltipTitle.textContent = projeto.titulo;
+    tooltipDescription.textContent = projeto.descricao;
+    tooltipDates.textContent = formatarData(projeto.dataInicio, projeto.dataFim, projeto.finalizado);
 
-    tooltip.querySelectorAll('.etapa, .melhoria, .prioridade').forEach(e => e.remove());
-
-    if (projeto.prioridade) {
-        const prioridadeDiv = document.createElement('div');
-        prioridadeDiv.className = 'prioridade';
-        prioridadeDiv.innerHTML = `<strong>Prioridade:</strong> ${projeto.prioridade}`;
-        tooltip.appendChild(prioridadeDiv);
+    // Remover informações anteriores de etapa/melhoria
+    const existingInfo = tooltip.querySelector('.etapa, .melhoria');
+    if (existingInfo) {
+        existingInfo.remove();
     }
 
+    // Adicionar informação da melhoria se o projeto estiver em melhoria
     if (projeto.emMelhoria && projeto.melhoria) {
         const melhoriaDiv = document.createElement('div');
         melhoriaDiv.className = 'melhoria';
-        melhoriaDiv.innerHTML = `<strong>Melhoria em desenvolvimento:</strong> ${projeto.melhoria}`;
+        melhoriaDiv.innerHTML = `<strong>Melhoria em Desenvolvimento:</strong>${projeto.melhoria}`;
         tooltip.appendChild(melhoriaDiv);
-    } else if (!projeto.finalizado && projeto.etapa) {
+    }
+    // Adicionar informação da etapa se o projeto não estiver finalizado e não estiver em melhoria
+    else if (!projeto.finalizado && projeto.etapa) {
         const etapaDiv = document.createElement('div');
         etapaDiv.className = 'etapa';
-        etapaDiv.innerHTML = `<strong>Etapa atual:</strong> ${projeto.etapa}`;
+        etapaDiv.innerHTML = `<strong>Etapa Atual:</strong>${projeto.etapa}`;
         tooltip.appendChild(etapaDiv);
     }
 
@@ -202,24 +174,25 @@ function mostrarTooltip(event, projeto) {
 }
 
 function esconderTooltip() {
-    document.getElementById('tooltip').classList.remove('show');
+    const tooltip = document.getElementById('tooltip');
+    tooltip.classList.remove('show');
 }
 
 function moverTooltip(event) {
     const tooltip = document.getElementById('tooltip');
-    tooltip.style.left = event.pageX + 15 + 'px';
-    tooltip.style.top = event.pageY - 15 + 'px';
+    const x = event.pageX + 15;
+    const y = event.pageY - 15;
+    
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
 }
 
-/**************************************************
- * RENDERIZAÇÃO E FILTROS
- **************************************************/
 function renderizarTimeline(filtro = 'todos') {
     const timeline = document.getElementById('timeline');
     timeline.innerHTML = '';
 
     let projetosFiltrados = projetos;
-
+    
     if (filtro === 'finalizados') {
         projetosFiltrados = projetos.filter(p => p.finalizado || p.emMelhoria);
     } else if (filtro === 'pendentes') {
@@ -228,46 +201,72 @@ function renderizarTimeline(filtro = 'todos') {
         projetosFiltrados = projetos.filter(p => p.emMelhoria);
     }
 
-    if (!projetosFiltrados.length) {
-        timeline.innerHTML = '<div class="loading">Nenhum projeto encontrado</div>';
+    if (projetosFiltrados.length === 0) {
+        timeline.innerHTML = '<div class="loading">Nenhum projeto encontrado para este filtro</div>';
         return;
     }
 
     projetosFiltrados.forEach((projeto, index) => {
-        timeline.appendChild(criarItemTimeline(projeto, index));
+        const item = criarItemTimeline(projeto, index);
+        timeline.appendChild(item);
     });
 
+    // Adicionar animação de entrada
+    const items = timeline.querySelectorAll('.timeline-item');
+    items.forEach((item, index) => {
+        setTimeout(() => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(30px)';
+            item.style.transition = 'all 0.6s ease';
+            
+            setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }, 100);
+        }, index * 150);
+    });
+
+    // Atualizar contadores
     atualizarContadores();
 }
 
 function atualizarContadores() {
-    document.getElementById('count-todos').textContent = projetos.length;
-    document.getElementById('count-finalizados').textContent =
-        projetos.filter(p => p.finalizado || p.emMelhoria).length;
-    document.getElementById('count-pendentes').textContent =
-        projetos.filter(p => !p.finalizado && !p.emMelhoria).length;
-    document.getElementById('count-melhorias').textContent =
-        projetos.filter(p => p.emMelhoria).length;
+    const todos = projetos.length;
+    const finalizados = projetos.filter(p => p.finalizado || p.emMelhoria).length;
+    const pendentes = projetos.filter(p => !p.finalizado && !p.emMelhoria).length;
+    const melhorias = projetos.filter(p => p.emMelhoria).length;
+
+    document.getElementById('count-todos').textContent = todos;
+    document.getElementById('count-finalizados').textContent = finalizados;
+    document.getElementById('count-pendentes').textContent = pendentes;
+    document.getElementById('count-melhorias').textContent = melhorias;
 }
 
 function inicializarFiltros() {
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderizarTimeline(btn.dataset.filter);
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remover classe active de todos os botões
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Adicionar classe active ao botão clicado
+            button.classList.add('active');
+            
+            const filtro = button.dataset.filter;
+            if (filtro) {
+                renderizarTimeline(filtro);
+            }
         });
     });
 }
 
-/**************************************************
- * INICIALIZAÇÃO
- **************************************************/
+// Simular carregamento e renderizar timeline
 setTimeout(() => {
     renderizarTimeline();
     inicializarFiltros();
-}, 500);
+}, 1000);
 
+// Adicionar suporte a teclado para acessibilidade
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         esconderTooltip();
