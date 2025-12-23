@@ -1,5 +1,5 @@
 const projetos = [
-      {
+    {
         titulo: "Sistema de chamados",
         imagem: "https://i.ibb.co/1t7Pn3Dt/chamados.png",
         descricao: "Sistema interno de gerenciamento de chamados, com os módulos da TI, Manutenção, Compras, Assistência Social, Psicologia, Higienização, Almoxarifado e Hotelaria.",
@@ -188,30 +188,22 @@ const projetos = [
         etapa: "Não iniciado",
         prioridade: "Baixa",
         link: "#"
-    },
-    {
-        titulo: "Módulo de Treinamentos Institucionais",
-        imagem: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop",
-        descricao: "Cadastro e gerenciamento de treinamentos institucionais presenciais e online, permitindo acompanhamento e facilitando a gestão pelo setor de Gestão de Pessoas.",
-        dataInicio: null,
-        finalizado: false,
-        etapa: "Não iniciado",
-        prioridade: "Média",
-        link: "#"
     }
 ];
 
+// Detectar se é dispositivo touch
+const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+function formatoData(data) {
+    if (!data) return '';
+    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const [ano, mes] = data.split('-');
+    return `${meses[parseInt(mes) - 1]}/${ano}`;
+}
+
 function formatarData(dataInicio, dataFim, finalizado) {
-    const formatoData = (data) => {
-        const date = new Date(data);
-        return date.toLocaleDateString('pt-BR', { 
-            month: 'short', 
-            year: 'numeric' 
-        });
-    };
-    
-    if (!dataInicio) {
-        return finalizado && dataFim ? `Até ${formatoData(dataFim)}` : 'Data não definida';
+    if (!dataInicio && !dataFim) {
+        return 'Não iniciado';
     }
     
     if (!finalizado) {
@@ -248,22 +240,70 @@ function criarItemTimeline(projeto, index) {
                 '<div class="status-badge pendente-inicio">Em andamento</div>' :
                 '<div class="status-badge pendente-sem-inicio">Planejamento</div>';
     
+    // Badge de prioridade
+    let prioridadeBadge = '';
+    if (projeto.prioridade) {
+        const prioridadeClass = projeto.prioridade.toLowerCase();
+        prioridadeBadge = `<div class="priority-badge ${prioridadeClass}">${projeto.prioridade}</div>`;
+    }
+    
     item.innerHTML = `
         <div class="timeline-content">
             ${statusIndicator}
-            <img src="${projeto.imagem}" alt="${projeto.titulo}" class="timeline-image">
+            <img src="${projeto.imagem}" alt="${projeto.titulo}" class="timeline-image" loading="lazy">
             <h3 class="timeline-title">${projeto.titulo}</h3>
+            ${prioridadeBadge}
             <div class="timeline-date">${formatarData(projeto.dataInicio, projeto.dataFim, projeto.finalizado)}</div>
         </div>
     `;
 
-    // Adicionar eventos
-    item.addEventListener('mouseenter', (e) => mostrarTooltip(e, projeto));
-    item.addEventListener('mouseleave', esconderTooltip);
-    item.addEventListener('mousemove', moverTooltip);
-    item.addEventListener('click', () => {
-        window.open(projeto.link, '_blank');
-    });
+    // Eventos para desktop (mouse)
+    if (!isTouchDevice) {
+        item.addEventListener('mouseenter', (e) => mostrarTooltip(e, projeto));
+        item.addEventListener('mouseleave', esconderTooltip);
+        item.addEventListener('mousemove', moverTooltip);
+    } else {
+        // Eventos para mobile (touch)
+        let touchTimer;
+        let tooltipVisible = false;
+        
+        item.addEventListener('touchstart', (e) => {
+            // Long press para mostrar tooltip
+            touchTimer = setTimeout(() => {
+                e.preventDefault();
+                mostrarTooltipMobile(e, projeto, item);
+                tooltipVisible = true;
+            }, 500);
+        });
+        
+        item.addEventListener('touchmove', () => {
+            clearTimeout(touchTimer);
+            if (tooltipVisible) {
+                esconderTooltip();
+                tooltipVisible = false;
+            }
+        });
+        
+        item.addEventListener('touchend', (e) => {
+            clearTimeout(touchTimer);
+            if (!tooltipVisible && projeto.link !== '#') {
+                // Tap rápido abre o link
+                window.open(projeto.link, '_blank');
+            }
+            if (tooltipVisible) {
+                tooltipVisible = false;
+            }
+        });
+    }
+    
+    // Click para desktop
+    if (!isTouchDevice) {
+        item.addEventListener('click', () => {
+            if (projeto.link !== '#') {
+                window.open(projeto.link, '_blank');
+            }
+        });
+    }
 
     return item;
 }
@@ -278,29 +318,99 @@ function mostrarTooltip(event, projeto) {
     tooltipDescription.textContent = projeto.descricao;
     tooltipDates.textContent = formatarData(projeto.dataInicio, projeto.dataFim, projeto.finalizado);
 
-    // Remover informações anteriores de etapa/melhoria
-    const existingInfo = tooltip.querySelector('.etapa, .melhoria');
+    // Remover informações anteriores
+    const existingInfo = tooltip.querySelector('.etapa, .melhoria, .prioridade');
     if (existingInfo) {
         existingInfo.remove();
     }
 
-    // Adicionar informação da melhoria se o projeto estiver em melhoria
+    // Adicionar prioridade se existir
+    if (projeto.prioridade) {
+        const prioridadeDiv = document.createElement('div');
+        prioridadeDiv.className = 'prioridade';
+        prioridadeDiv.innerHTML = `<strong>Prioridade:</strong> ${projeto.prioridade}`;
+        tooltip.appendChild(prioridadeDiv);
+    }
+
+    // Adicionar informação da melhoria
     if (projeto.emMelhoria && projeto.melhoria) {
         const melhoriaDiv = document.createElement('div');
         melhoriaDiv.className = 'melhoria';
-        melhoriaDiv.innerHTML = `<strong>Melhoria em Desenvolvimento:</strong>${projeto.melhoria}`;
+        melhoriaDiv.innerHTML = `<strong>Melhoria em Desenvolvimento:</strong> ${projeto.melhoria}`;
         tooltip.appendChild(melhoriaDiv);
     }
-    // Adicionar informação da etapa se o projeto não estiver finalizado e não estiver em melhoria
+    // Adicionar informação da etapa
     else if (!projeto.finalizado && projeto.etapa) {
         const etapaDiv = document.createElement('div');
         etapaDiv.className = 'etapa';
-        etapaDiv.innerHTML = `<strong>Etapa Atual:</strong>${projeto.etapa}`;
+        etapaDiv.innerHTML = `<strong>Etapa Atual:</strong> ${projeto.etapa}`;
         tooltip.appendChild(etapaDiv);
     }
 
     tooltip.classList.add('show');
     moverTooltip(event);
+}
+
+function mostrarTooltipMobile(event, projeto, item) {
+    const tooltip = document.getElementById('tooltip');
+    const tooltipTitle = document.getElementById('tooltip-title');
+    const tooltipDescription = document.getElementById('tooltip-description');
+    const tooltipDates = document.getElementById('tooltip-dates');
+
+    tooltipTitle.textContent = projeto.titulo;
+    tooltipDescription.textContent = projeto.descricao;
+    tooltipDates.textContent = formatarData(projeto.dataInicio, projeto.dataFim, projeto.finalizado);
+
+    // Remover informações anteriores
+    const existingInfo = tooltip.querySelector('.etapa, .melhoria, .prioridade');
+    if (existingInfo) {
+        existingInfo.remove();
+    }
+
+    // Adicionar prioridade
+    if (projeto.prioridade) {
+        const prioridadeDiv = document.createElement('div');
+        prioridadeDiv.className = 'prioridade';
+        prioridadeDiv.innerHTML = `<strong>Prioridade:</strong> ${projeto.prioridade}`;
+        tooltip.appendChild(prioridadeDiv);
+    }
+
+    // Adicionar melhoria ou etapa
+    if (projeto.emMelhoria && projeto.melhoria) {
+        const melhoriaDiv = document.createElement('div');
+        melhoriaDiv.className = 'melhoria';
+        melhoriaDiv.innerHTML = `<strong>Melhoria:</strong> ${projeto.melhoria}`;
+        tooltip.appendChild(melhoriaDiv);
+    } else if (!projeto.finalizado && projeto.etapa) {
+        const etapaDiv = document.createElement('div');
+        etapaDiv.className = 'etapa';
+        etapaDiv.innerHTML = `<strong>Etapa:</strong> ${projeto.etapa}`;
+        tooltip.appendChild(etapaDiv);
+    }
+
+    tooltip.classList.add('show');
+    
+    // Posicionar tooltip no mobile
+    const rect = item.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    let x = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let y = rect.top - tooltipRect.height - 10;
+    
+    // Ajustar se sair da tela
+    if (x < 10) x = 10;
+    if (x + tooltipRect.width > window.innerWidth - 10) {
+        x = window.innerWidth - tooltipRect.width - 10;
+    }
+    if (y < 10) y = rect.bottom + 10;
+    
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = (y + window.scrollY) + 'px';
+    
+    // Auto-esconder após 3 segundos no mobile
+    setTimeout(() => {
+        esconderTooltip();
+    }, 3000);
 }
 
 function esconderTooltip() {
@@ -309,9 +419,21 @@ function esconderTooltip() {
 }
 
 function moverTooltip(event) {
+    if (isTouchDevice) return; // Não mover tooltip no mobile
+    
     const tooltip = document.getElementById('tooltip');
-    const x = event.pageX + 15;
-    const y = event.pageY - 15;
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    let x = event.pageX + 15;
+    let y = event.pageY - 15;
+    
+    // Ajustar se sair da tela
+    if (x + tooltipRect.width > window.innerWidth - 10) {
+        x = event.pageX - tooltipRect.width - 15;
+    }
+    if (y < 10) {
+        y = 10;
+    }
     
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
@@ -373,7 +495,7 @@ function atualizarContadores() {
 }
 
 function inicializarFiltros() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
+    const filterButtons = document.querySelectorAll('.filter-btn[data-filter]');
     
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -390,15 +512,40 @@ function inicializarFiltros() {
     });
 }
 
+// Fechar tooltip ao tocar fora no mobile
+if (isTouchDevice) {
+    document.addEventListener('touchstart', (e) => {
+        const tooltip = document.getElementById('tooltip');
+        if (!e.target.closest('.timeline-item') && tooltip.classList.contains('show')) {
+            esconderTooltip();
+        }
+    });
+}
+
 // Simular carregamento e renderizar timeline
 setTimeout(() => {
     renderizarTimeline();
     inicializarFiltros();
 }, 1000);
 
-// Adicionar suporte a teclado para acessibilidade
+// Suporte a teclado
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         esconderTooltip();
+    }
+});
+
+// Otimização de scroll para mobile
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            // Esconder tooltip durante scroll no mobile
+            if (isTouchDevice) {
+                esconderTooltip();
+            }
+            ticking = false;
+        });
+        ticking = true;
     }
 });
